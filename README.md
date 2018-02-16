@@ -508,19 +508,27 @@ snpbac -i /path/to/my_directory/se_list.txt -o /path/to/any/output/directory/ -r
 For paired-end reads, which have two files per sample, each line of the input file should have the absolute path to the forward reads for a sample, and the absolute path to the reverse reads for a sample, separated by a comma (,). This is done to ensure that SNPBac knows exactly which forward and reverse read pairs belong together. This can get a little tricky/tedious if your read pairs have different prefixes or suffixes; however, if your read pairs for each sample have identical sample names, as well as the same extensions indicating forward or reverse reads, you can use the handy ```make_snpbac_infile.py``` command.
 
 Example files names that WILL work with make_snpbac_infile.py: 
+
 sample1_1.fastq.gz, sample1_2.fastq.gz, sample42_1.fastq.gz, sample42_2.fastq.gz, sampleABCD_1.fastq.gz, sampleABCD_2.fastq.gz
+
 All of these files have (i) a shared suffix for forward reads ("_1.fastq.gz"), (ii) a shared suffix for reverse reads ("_2.fastq.gz"), (iii) matching prefixes (sample1==sample1, sample42==sample42, sampleABCD==sampleABCD)
 
 Example files names that WILL work with make_snpbac_infile.py: 
+
 spam_R1_001.fastq.gz, spam_R2_001.fastq.gz, ham_R1_001.fastq.gz, ham_R2_001.fastq.gz, eggs_R1_001.fastq.gz, eggs_R2_001.fastq.gz
+
 All of these files have (i) a shared suffix for forward reads ("_R1_001.fastq.gz"), (ii) a shared suffix for reverse reads ("_R2_001.fastq.gz"), (iii) matching prefixes (spam==spam, ham==ham, eggs==eggs)
 
 Example files names that will NOT work with make_snpbac_infile.py:
+
 sample1_1.fastq.gz, sample1_2.fastq.gz, sample2_R1_001.fastq.gz, sample2_R2_001.fastq.gz
+
 This samples do not have a shared suffix for forward reads ("_1.fastq.gz" &#8800; "_R1_001.fastq.gz") or reverse reads ("_2.fastq.gz &#8800; "_2_001.fastq.gz")
 
 Example files names that will NOT work with make_snpbac_infile.py:
+
 sample1_S14_R1.fastq.gz, sample1_S3_R2.fastq.gz, sample2_H4_R1.fastq.gz, sample2_H7_R2.fastq.gz
+
 While these samples have a shared suffix for both forward reads ("_R1.fastq.gz"=="_R1.fastq.gz") and reverse reads ("_R2.fastq.gz"=="_R2.fastq.gz"), each sample does not have a shared prefix ("sample1_S14" &#8800; "sample1_S3"; "sample2_H4" &#8800; "sample2_H7")
 
 If your file names meet these criteria, make sure all of your paired-end read files are in a directory together (we'll call it "my_directory_pe"), and run make_snpbac_infile.py, substituting "_forward_suffix.fastq.gz" and "_reverse_suffix.fastq.gz" with the appropriate forward and reverse suffixes for your sequences, respectively (you can type ```make_snpbac_infile.py -h``` or ```make_snpbac_infile.py --help``` for a help message in your terminal):
