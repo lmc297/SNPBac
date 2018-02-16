@@ -335,7 +335,7 @@ will be retained and used downstream. Default is set to 20 (99% chance of polymo
 **-\-remove_recombination [True or False]**
 Remove SNPs found in regions of recombination identified using Gubbins. If set to True, Gubbins will be used to identify 
 regions of recombination in the consensus genomes, and SNPBac will filter out SNPs found in these regions when producing
-a final matrix and fasta of core SNPs. Setting this to False will bypass Gubbins. Default is set to True.
+a final matrix and fasta of core SNPs. Setting this to False will bypass Gubbins. Default is set to True (Note that Gubbins requires at least 4 sequences; if you are calling variants in fewer than 4 samples, set this option to False).
 
 **-t/-\-threads [integer]**
 Number of threads to use. Default is set to 1.
@@ -349,7 +349,7 @@ Number of threads to use. Default is set to 1.
 A single SNPBac run will deposit the following in your specified output directory (-\-output):
   
 **snpbac_final_results**
-*directory*
+*1 directory*
 Final results directory in which SNPBac deposits all of its output files. SNPBac creates this directory in your specified
 output directory (-\-output). 
 
@@ -357,41 +357,223 @@ Note that if you want to re-run an analysis in the sample output directory (-\-o
 move the snpbac_final_results directory from your previous run to a new directory (not your specified output directory)
 to avoid over-writing your previous results.
 
-***your_genome_final_results.txt***
-*file*
-Final results text file, 1 per input genome. seq2mlst creates this final results text file, which contains a tab-separated 
-line, containing the isolate's sequence type (ST), if available, and the corresponding allelic types (AT). The best-matching 
-allele is reported at each locus; an allele that does not match with 100\% identity or coverage is denoted by an asterisk 
-(\*), while an allele that is not detected in the genome at the given e-value threshold is denoted by "?". If a sequence type
-cannot be determined using the best-matching allelic types, a "?" is listed in its place. A ST that is detemined using any 
-best-matching alleles that did not match with 100\% identity or coverage is denoted by \*, regardless of whether all 7 
-alleles could be associated with a ST or not.
+***snpbac_core_snps.fasta***
+*1 file*
+A fasta file containing core SNPs (i.e. SNPs at sites present in all of your input samples), with one sequence per sample (the reference is excluded). 
 
-**genefiles**
+Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
+
+SNPs in this file are the same as those in the *snpbac_core_snps.txt* and *snpbac_core_snps.vcf* files (below), just in fasta format.
+
+This file can be used to build a phylogenetic tree with your favorite software, or to get pairwise SNP differences between samples (all sites are variant sites).
+
+***snpbac_core_snps.txt***
+*1 file*
+A tab-separated file containing a matrix of core SNPs (i.e. SNPs at sites present in all of your input samples), with one column per sample (reference excluded) and one row per position in the reference genome at which the core SNP was detected. If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "position" column corresponds to the position in this pseudochromosome at which a core SNP was found.
+
+Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
+
+SNPs in this file are the same as those in the *snpbac_core_snps.fasta* file (above) and the *snpbac_core_snps.vcf* file (below), just in matrix format, with information on their position included.
+
+This file can be easily viewed in Excel or loaded into R.
+
+***snpbac_core_snps.vcf***
+*1 file*
+A variant call format (VCF) file containing core SNPs (i.e. SNPs at sites present in all of your input samples). If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a core SNP was found.
+
+Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
+
+SNPs in this file are the same as those in the *snpbac_core_snps.fasta* and *snpbac_core_snps.txt* files (above), just in VCF format.
+
+This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
+
+***snpbac_snps.recode.vcf***
+*1 file*
+A variant call format (VCF) file containing SNPs above the minimum quality threshold specified by the -\-quality argument (default is 20). In addition to containing core SNPs, this VCF file also contains SNPs present at sites in the genome that are not present in all samples (i.e. it contains SNPs that are not part of the core genome of all of the samples), as well as sites that are SNPs relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other). This file also contains SNPs that are present in regions of recombination.
+
+If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a core SNP was found.
+
+This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
+
+This file has an assoicated log file, *snpbac_snps.log*, which explains the command used by vcftools to filter SNPs.
+
+This file also has an associated index file, *snpbac_snps.recode.vcf.gz.tbi*, which can be deleted if desired. 
+
+***snpbac_indels.recode.vcf***
+*1 file*
+A variant call format (VCF) file containing insertions and deletions (indels) above the minimum quality threshold specified by the -\-quality argument (default is 20). 
+
+If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which an indel was found.
+
+This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
+
+This file has an assoicated log file, *snpbac_indels.log*, which explains the command used by vcftools to filter indels.
+
+***snpbac_raw.vcf***
+*1 file*
+A variant call format (VCF) file containing all SNPs and indels called using the specified variant caller (samtools/bcftools or freebayes; default is samtools/bcftools). This file contains all raw variants and has undergone no filtering.
+
+If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a SNP or indel was found.
+
+This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
+
+***your_sample_consensus.fasta***
+*1 file per sample*
+A fasta file containing the consensus sequence of your sample. The consensus sequence is generated by applying the SNPs found in *snpbac_snps.recode.vcf* to your reference genome (this step is performed prior to running Gubbins, so regions of recombination have not been filtered out). These files are concatenated and used as input to Gubbins.
+
+The "your_sample" prefix for your_sample_consensus.fasta is named by using everything prior to the first "." in your .fastq/.fastq.gz files. If a sample uses paired-end reads, the filename prefix is generated using the name of the file containing the forward reads, so "your_sample" will probably be something like "your_sample_1" or "your_sample_R1", depending on your forward read file's name (the data in the file itself is created using both forward and reverse reads, though, so don't be alarmed!).
+
+In addition to a consensus fasta, each sample will have (i) an individual gzipped vcf file *your_sample.vcf.gz*, and (ii) an associated index file *your_sample.vcf.gz.tbi*. These are produced from *snpbac_snps.recode.vcf* using the vcf-subset command found in vcftools. These files can be deleted, if desired.
+
+***your_sample_snpbac.bam***
+*1 file per sample*
+A sorted bam file used for variant calling, 1 per input sample. This bam file is created by mapping reads to your reference genome using either bwa mem or bowtie2, filtering out PCR duplicates, and sorting, and serves as the final input into the selected variant caller (samtools/bcftools or freebayes). 
+
+These files may be useful for looking at mapping statistics, and can be easily converted to the human-readable SAM format using samtools:
+```
+samtools view -h -o your_sample.sam your_sample_snpbac.bam
+```
+
+In addition to a sorted bam, each sample will have an index file, *your_sample_snpbac.bam.bai*, which may be deleted if you're not planning on manipulating the bam files any further.
+
+**gubbins**
 *directory*
-Directory in which seq2mlst deposits genefiles, (multi)fasta files which contain the sequences of all genes detected in 
-a run. seq2mlst creates this directory within the seq2mlst_final_results directory within your specified output directory 
-(output_directory/seq2mlst_final_results/genefiles).
+If ```--remove_recombination True``` is used (as is done by default), this directory is created in the snpbac_final_results directory within the specified output directory (output_directory/snpbac_final_results/gubbins). This directory contains the input file that SNPBac passes to Gubbins, titled *snpbac.fna*, which is a multifasta with all of the concatenated consensus sequences output by SNPBac (feel free to delete this file and/or the snpbac consensus fasta files for each of your samples, as they are redundant).
 
-***some_gene_genefile.fasta***
-*file*
-seq2mlst genefiles, (multi)fasta files which contain the sequences of all genes detected in a run. 1 file per each allele 
-is created files are created, and if seq2mlst is run using more than 1 genome as input (either in multifasta format, or if 
-seq2mlst is run in a loop), genes from each genome are aggregated together in each genefile. These files are formatted so you
-can easily input them into your favorite aligner, phylogenetic tree construction program, the NCBI BLAST server, etc.
-
-**isolatefiles**
-*directory*
-Directory in which seq2mlst deposits results directories for individual genomes. seq2mlst creates this directory within the 
-seq2mlst_final_results directory within your specified output directory 
-(output_directory/seq2mlst_final_results/isolatefiles).
-
-***your_genome_results***
-*directory*
-Directory in which seq2mlst deposits additional results files for each input genome. seq2mlst creates this directory within 
-the isolatefiles directory (output_directory/seq2mlst_final_results/isolatefiles/*your_genome*_results). Within this 
-directory, you'll find detailed tab-separated results files for each typing analysis performed, as well as fasta files 
-containing genes extracted from the genome in question. 
+This directory contains many useful and interesting files that Gubbins outputs, including a phylogenetic tree constructed using RAxML, recombination predictions, and filtered polymorphic sites. You can read more about the types of files Gubbins produces <a href="https://sanger-pathogens.github.io/gubbins/"> here. </a>
 
 
 ------------------------------------------------------------------------
+
+
+## Making a SNPBac Input File
+
+As mentioned above, SNPBac requires you to produce a text file explaining text file containing the absolute paths to your reads, one sample per line. Obviously, you can open up your favorite text editor and type/copy/paste this out, but you may find the following tricks to be useful.
+
+### Single-End Reads
+For single-end reads, this is simply a list of absolute paths. You can generate this simply by moving all of your single-end read files to one directory (we'll call it "my_directory"), moving to that directory using ```cd /path/to/my_directory/```, and typing the following command in your terminal (this command works if all of your read files end in ".fastq.gz"; if your read files end in ".fastq", just omit the ".gz" part):
+
+```
+ls -d -1 $PWD/*.fastq.gz > se_list.txt
+```
+This will produce an input file named "se_list.txt" within "my_directory" (but feel free to name it anything you want!). If "my_directory" contains 5 single-end read files ending in .fastq.gz (sample1.fastq.gz ... sample5.fastq.gz), our input file "se_list.txt" will look something like this:
+
+```
+/path/to/my_directory/sample1.fastq.gz
+/path/to/my_directory/sample2.fastq.gz
+/path/to/my_directory/sample3.fastq.gz
+/path/to/my_directory/sample4.fastq.gz
+/path/to/my_directory/sample5.fastq.gz
+```
+We can now give this to SNPBac's ```-i``` argument when we run the command:
+```
+snpbac -i /path/to/my_directory/se_list.txt -o /path/to/any/output/directory/ -r /path/to/reference_genome.fasta
+```
+
+### Paired-End Reads
+For paired-end reads, which have two files per sample, each line of the input file should have the absolute path to the forward reads for a sample, and the absolute path to the reverse reads for a sample, separated by a comma (,). This is done to ensure that SNPBac knows exactly which forward and reverse read pairs belong together. This can get a little tricky/tedious if your read pairs have different prefixes or suffixes; however, if your read pairs for each sample have identical sample names, as well as the same extensions indicating forward or reverse reads, you can use the handy ```make_snpbac_infile.py``` command.
+
+Example files names that WILL work with make_snpbac_infile.py: 
+sample1_1.fastq.gz, sample1_2.fastq.gz, sample42_1.fastq.gz, sample42_2.fastq.gz, sampleABCD_1.fastq.gz, sampleABCD_2.fastq.gz
+All of these files have (i) a shared suffix for forward reads ("_1.fastq.gz"), (ii) a shared suffix for reverse reads ("_2.fastq.gz"), (iii) matching prefixes (sample1==sample1, sample42==sample42, sampleABCD==sampleABCD)
+
+Example files names that WILL work with make_snpbac_infile.py: 
+spam_R1_001.fastq.gz, spam_R2_001.fastq.gz, ham_R1_001.fastq.gz, ham_R2_001.fastq.gz, eggs_R1_001.fastq.gz, eggs_R2_001.fastq.gz
+All of these files have (i) a shared suffix for forward reads ("_R1_001.fastq.gz"), (ii) a shared suffix for reverse reads ("_R2_001.fastq.gz"), (iii) matching prefixes (spam==spam, ham==ham, eggs==eggs)
+
+Example files names that will NOT work with make_snpbac_infile.py:
+sample1_1.fastq.gz, sample1_2.fastq.gz, sample2_R1_001.fastq.gz, sample2_R2_001.fastq.gz
+This samples do not have a shared suffix for forward reads ("_1.fastq.gz" &#8800; "_R1_001.fastq.gz") or reverse reads ("_2.fastq.gz &#8800; "_2_001.fastq.gz")
+
+Example files names that will NOT work with make_snpbac_infile.py:
+sample1_S14_R1.fastq.gz, sample1_S3_R2.fastq.gz, sample2_H4_R1.fastq.gz, sample2_H7_R2.fastq.gz
+While these samples have a shared suffix for both forward reads ("_R1.fastq.gz"=="_R1.fastq.gz") and reverse reads ("_R2.fastq.gz"=="_R2.fastq.gz"), each sample does not have a shared prefix ("sample1_S14" &#8800; "sample1_S3"; "sample2_H4" &#8800; "sample2_H7")
+
+If your file names meet these criteria, make sure all of your paired-end read files are in a directory together (we'll call it "my_directory_pe"), and run make_snpbac_infile.py, substituting "_forward_suffix.fastq.gz" and "_reverse_suffix.fastq.gz" with the appropriate forward and reverse suffixes for your sequences, respectively (you can type ```make_snpbac_infile.py -h``` or ```make_snpbac_infile.py --help``` for a help message in your terminal):
+
+```
+make_snpbac_infile.py --input /path/to/my_directory_pe/ --out /path/to/my_directory_pe/pe_list.txt \
+--forward "_forward_suffix.fastq.gz" --reverse "_reverse_suffix.fastq.gz"
+```
+This will output our desired input file for paired end reads, titled "pe_list.txt", in our "my_directory_pe" (obviously, you can change the name/path to the output file!). Common forward/reverse suffix pairs you might run into are "_1.fastq.gz"/"_2.fastq.gz", "_R1.fastq.gz"/"_R2.fastq.gz"
+
+If we had 3 paired-end samples in our "my_directory_pe" directory (sampleA_R1.fastq.gz, sampleA_R2.fastq.gz, sampleB_R1.fastq.gz, sampleB_R2.fastq.gz, sampleC_R1.fastq.gz, sampleC_R2.fastq.gz), our output file should look something like this:
+```
+/path/to/my_directory_pe/sampleA_R1.fastq.gz,/path/to/my_directory_pe/sampleA_R2.fastq.gz
+/path/to/my_directory_pe/sampleB_R1.fastq.gz,/path/to/my_directory_pe/sampleB_R2.fastq.gz
+/path/to/my_directory_pe/sampleC_R1.fastq.gz,/path/to/my_directory_pe/sampleC_R2.fastq.gz
+```
+We can now give this to SNPBac's ```-i``` argument when we run the command:
+```
+snpbac -i /path/to/my_directory_pe/pe_list.txt -o /path/to/any/output/directory/ -r /path/to/reference_genome.fasta
+```
+
+### Mixture of Single- and Paired-End Samples
+
+If we have some samples that have single-end reads and others that have paired-end reads, we can just concatenate our lists (se_list.txt and pe_list.txt) from the two examples above using ```cat``` in our terminal:
+
+```
+cat /path/to/my_directory/se_list.txt /path/to/my_directory_pe/pe_list.txt > /path/to/any_directory/combined_list.txt
+```
+This produces a concatenated list called combined_list.txt in a directory called "any_directory" that looks like this (as always, you can change the path and name of the output list):
+```
+/path/to/my_directory/sample1.fastq.gz
+/path/to/my_directory/sample2.fastq.gz
+/path/to/my_directory/sample3.fastq.gz
+/path/to/my_directory/sample4.fastq.gz
+/path/to/my_directory/sample5.fastq.gz
+/path/to/my_directory_pe/sampleA_R1.fastq.gz,/path/to/my_directory_pe/sampleA_R2.fastq.gz
+/path/to/my_directory_pe/sampleB_R1.fastq.gz,/path/to/my_directory_pe/sampleB_R2.fastq.gz
+/path/to/my_directory_pe/sampleC_R1.fastq.gz,/path/to/my_directory_pe/sampleC_R2.fastq.gz
+```
+
+We can now give this to SNPBac's ```-i``` argument when we run the command:
+```
+snpbac -i /path/to/any_directory/combined_list.txt -o /path/to/any/output/directory/ -r /path/to/reference_genome.fasta
+```
+
+------------------------------------------------------------------------
+
+
+## References
+
+Cock, Peter J. A., Tiago Antao, Jeffrey T. Chang, Brad A. Chapman, Cymon J. Cox, Andrew Dalke, Iddo Friedberg,
+Thomas Hamelryck, Frank Kauff, Bartek Wilczynski, and Michiel J. L. de Hoon. 2009.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/19304878"> Biopython: freely available Python tools for 
+computational molecular biology and bioinformatics.</a> *Bioinformatics* 25(11): 1422-1423.
+
+Croucher, Nicholas J., Andrew J. Page, Thomas R. Connor, Aidan J. Delaney, Jacqueline A. Keane, Stephen D. Bentley,
+Julian Parkhill, and Simon R. Harris. 2015. <a href="https://www.ncbi.nlm.nih.gov/pubmed/25414349">
+Rapid phylogenetic analysis of large samples of recombinant bacterial whole genome sequences using Gubbins.</a>
+*Nucleic Acids Research* 43(3): e15.
+
+Danecek, Petr, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert E. Handsaker,
+Gerton Lunter, Gabor T. Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin, and 1000 Genomes Project Analysis Group. 
+2011. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3137218/">The variant call format and VCFtools. </a>
+*Bioinformatics* 27(15): 2156–2158.
+
+Garrison E, Marth G. 2012. <a href="https://arxiv.org/abs/1207.3907">Haplotype-based variant detection from short-read 
+sequencing.</a> arXiv preprint arXiv:1207.3907 [q-bio.GN] 2012
+
+Langmead, Ben and Steven L Salzberg. 2012. <a href="https://www.ncbi.nlm.nih.gov/pubmed/22388286">
+Fast gapped-read alignment with Bowtie 2. </a> *Nature Methods* 9(4): 357–359.
+
+Li, Heng, Bob Handsaker, Alec Wysoker, Tim Fennell, Jue Ruan, Nils Homer, Gabor Marth, Goncalo Abecasis, Richard Durbin,
+and 1000 Genome Project Data Processing Subgroup. 2009. <a href="https://www.ncbi.nlm.nih.gov/pubmed/19505943">
+The Sequence Alignment/Map format and SAMtools.</a> *Bioinformatics* 25(16): 2078–2079.
+
+Li, Heng. 2013. <a href="https://arxiv.org/abs/1303.3997">Aligning sequence reads, clone sequences and assembly contigs with
+BWA-MEM.</a> arXiv:1303.3997v2 [q-bio.GN]. 
+
+Stamatakis, Alexandros. 2014. <a href="https://www.ncbi.nlm.nih.gov/pubmed/24451623"> RAxML version 8: a tool for 
+phylogenetic analysis and post-analysis of large phylogenies.</a> *Bioinformatics* 30(9): 1312–1313.
+
+
+------------------------------------------------------------------------
+
+
+
+
+
+
+
