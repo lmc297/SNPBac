@@ -349,7 +349,9 @@ Number of threads to use. Default is set to 1.
 A single SNPBac run will deposit the following in your specified output directory (-\-output):
   
 **snpbac_final_results**
+
 *1 directory*
+
 Final results directory in which SNPBac deposits all of its output files. SNPBac creates this directory in your specified
 output directory (-\-output). 
 
@@ -358,7 +360,9 @@ move the snpbac_final_results directory from your previous run to a new director
 to avoid over-writing your previous results.
 
 ***snpbac_core_snps.fasta***
+
 *1 file*
+
 A fasta file containing core SNPs (i.e. SNPs at sites present in all of your input samples), with one sequence per sample (the reference is excluded). 
 
 Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
@@ -368,7 +372,9 @@ SNPs in this file are the same as those in the *snpbac_core_snps.txt* and *snpba
 This file can be used to build a phylogenetic tree with your favorite software, or to get pairwise SNP differences between samples (all sites are variant sites).
 
 ***snpbac_core_snps.txt***
+
 *1 file*
+
 A tab-separated file containing a matrix of core SNPs (i.e. SNPs at sites present in all of your input samples), with one column per sample (reference excluded) and one row per position in the reference genome at which the core SNP was detected. If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "position" column corresponds to the position in this pseudochromosome at which a core SNP was found.
 
 Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
@@ -378,7 +384,9 @@ SNPs in this file are the same as those in the *snpbac_core_snps.fasta* file (ab
 This file can be easily viewed in Excel or loaded into R.
 
 ***snpbac_core_snps.vcf***
+
 *1 file*
+
 A variant call format (VCF) file containing core SNPs (i.e. SNPs at sites present in all of your input samples). If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a core SNP was found.
 
 Core SNPs in this file are above the minimum quality threshold specified by the -\-quality argument (default is 20). If ```-\-remove_recombination True``` is used (as is done by default), SNPs in regions of recombination identified using Gubbins are excluded from this file. In addition, SNPs that are called relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other) are also excluded from this file, as these would be considered invariant when just the samples are taken into consideration and not the reference.
@@ -388,7 +396,9 @@ SNPs in this file are the same as those in the *snpbac_core_snps.fasta* and *snp
 This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
 
 ***snpbac_snps.recode.vcf***
+
 *1 file*
+
 A variant call format (VCF) file containing SNPs above the minimum quality threshold specified by the -\-quality argument (default is 20). In addition to containing core SNPs, this VCF file also contains SNPs present at sites in the genome that are not present in all samples (i.e. it contains SNPs that are not part of the core genome of all of the samples), as well as sites that are SNPs relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other). This file also contains SNPs that are present in regions of recombination.
 
 If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a core SNP was found.
@@ -400,7 +410,9 @@ This file has an assoicated log file, *snpbac_snps.log*, which explains the comm
 This file also has an associated index file, *snpbac_snps.recode.vcf.gz.tbi*, which can be deleted if desired. 
 
 ***snpbac_indels.recode.vcf***
+
 *1 file*
+
 A variant call format (VCF) file containing insertions and deletions (indels) above the minimum quality threshold specified by the -\-quality argument (default is 20). 
 
 If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which an indel was found.
@@ -410,7 +422,9 @@ This file can be used with vcftools/bcftools, or viewed in a text editor or Exce
 This file has an assoicated log file, *snpbac_indels.log*, which explains the command used by vcftools to filter indels.
 
 ***snpbac_raw.vcf***
+
 *1 file*
+
 A variant call format (VCF) file containing all SNPs and indels called using the specified variant caller (samtools/bcftools or freebayes; default is samtools/bcftools). This file contains all raw variants and has undergone no filtering.
 
 If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a SNP or indel was found.
@@ -418,7 +432,9 @@ If the reference genome used contained multiple sequences, as is the case with a
 This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
 
 ***your_sample_consensus.fasta***
+
 *1 file per sample*
+
 A fasta file containing the consensus sequence of your sample. The consensus sequence is generated by applying the SNPs found in *snpbac_snps.recode.vcf* to your reference genome (this step is performed prior to running Gubbins, so regions of recombination have not been filtered out). These files are concatenated and used as input to Gubbins.
 
 The "your_sample" prefix for your_sample_consensus.fasta is named by using everything prior to the first "." in your .fastq/.fastq.gz files. If a sample uses paired-end reads, the filename prefix is generated using the name of the file containing the forward reads, so "your_sample" will probably be something like "your_sample_1" or "your_sample_R1", depending on your forward read file's name (the data in the file itself is created using both forward and reverse reads, though, so don't be alarmed!).
@@ -426,7 +442,9 @@ The "your_sample" prefix for your_sample_consensus.fasta is named by using every
 In addition to a consensus fasta, each sample will have (i) an individual gzipped vcf file *your_sample.vcf.gz*, and (ii) an associated index file *your_sample.vcf.gz.tbi*. These are produced from *snpbac_snps.recode.vcf* using the vcf-subset command found in vcftools. These files can be deleted, if desired.
 
 ***your_sample_snpbac.bam***
+
 *1 file per sample*
+
 A sorted bam file used for variant calling, 1 per input sample. This bam file is created by mapping reads to your reference genome using either bwa mem or bowtie2, filtering out PCR duplicates, and sorting, and serves as the final input into the selected variant caller (samtools/bcftools or freebayes). 
 
 These files may be useful for looking at mapping statistics, and can be easily converted to the human-readable SAM format using samtools:
@@ -437,7 +455,9 @@ samtools view -h -o your_sample.sam your_sample_snpbac.bam
 In addition to a sorted bam, each sample will have an index file, *your_sample_snpbac.bam.bai*, which may be deleted if you're not planning on manipulating the bam files any further.
 
 **gubbins**
+
 *directory*
+
 If ```--remove_recombination True``` is used (as is done by default), this directory is created in the snpbac_final_results directory within the specified output directory (output_directory/snpbac_final_results/gubbins). This directory contains the input file that SNPBac passes to Gubbins, titled *snpbac.fna*, which is a multifasta with all of the concatenated consensus sequences output by SNPBac (feel free to delete this file and/or the snpbac consensus fasta files for each of your samples, as they are redundant).
 
 This directory contains many useful and interesting files that Gubbins outputs, including a phylogenetic tree constructed using RAxML, recombination predictions, and filtered polymorphic sites. You can read more about the types of files Gubbins produces <a href="https://sanger-pathogens.github.io/gubbins/"> here. </a>
