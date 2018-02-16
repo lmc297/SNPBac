@@ -464,7 +464,7 @@ If something goes wrong during variant calling, it will be logged here.
 
 *1 file*
 
-If the reference genome you supply to SNPBac contains more than one sequence (e.g. it was a draft genome made up of contigs or scaffolds), SNPBac concatenates the sequences into a pseudochromosome in the order of their appearance. This is the fasta file for the concatenated pseudochromosome. Any position coordinates given by vcf files or snp matrices output by SNPBac will refer to positions in this file.
+If the reference genome you supply to SNPBac contains more than one sequence (e.g. it is a draft genome made up of contigs or scaffolds), SNPBac concatenates the sequences into a pseudochromosome in the order of their appearance. This is the fasta file for the concatenated pseudochromosome. Any position coordinates given by vcf files or snp matrices output by SNPBac will refer to positions in this file.
 
 In addition to the actual fasta, several index files are output, depending on which pipeline you run.
 
@@ -482,7 +482,7 @@ This directory contains many useful and interesting files that Gubbins outputs, 
 
 ## Making a SNPBac Input File
 
-As mentioned above, SNPBac requires you to produce a text file explaining text file containing the absolute paths to your reads, one sample per line. Obviously, you can open up your favorite text editor and type/copy/paste this out, but you may find the following tricks to be useful.
+As mentioned above, SNPBac requires you to produce a text file containing the absolute paths to your reads, one sample per line. Obviously, you can open up your favorite text editor and type/copy/paste this out, but you may find the following tricks to be useful.
 
 ### Single-End Reads
 For single-end reads, this is simply a list of absolute paths. You can generate this simply by moving all of your single-end read files to one directory (we'll call it "my_directory"), moving to that directory using ```cd /path/to/my_directory/```, and typing the following command in your terminal (this command works if all of your read files end in ".fastq.gz"; if your read files end in ".fastq", just omit the ".gz" part):
