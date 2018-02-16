@@ -113,10 +113,10 @@ snpbac -i sample_list.txt -o /path/to/output_directory -r reference.fasta --alig
 --quality 20 --remove_recombination True --threads 1
 ```
 
-**Map reads using bowtie2 instead of bwa mem:**
+**Map reads using bowtie2 instead of bwa mem, and use 8 threads:**
   
 ```
-snpbac -i sample_list.txt -o /path/to/output_directory -r reference.fasta --aligner bowtie2
+snpbac -i sample_list.txt -o /path/to/output_directory -r reference.fasta --aligner bowtie2 -t 8
 ```
 
 **Call variants with freebayes instead of samtools/bcftools:**
