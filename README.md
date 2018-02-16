@@ -133,7 +133,7 @@ snpbac -i sample_list.txt -o /path/to/output_directory -r reference.fasta --alig
 ```
 
 **Map reads with bwa mem, call variants using samtools/bcftools, and raise vcftools minimum quality threshold for SNPs
-and indels to 30:
+and indels to 30:**
 
 ```
 snpbac -i sample_list.txt -o /path/to/output_directory -r reference.fasta --quality 30
