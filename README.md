@@ -401,7 +401,7 @@ This file can be used with vcftools/bcftools, or viewed in a text editor or Exce
 
 A variant call format (VCF) file containing SNPs above the minimum quality threshold specified by the -\-quality argument (default is 20). In addition to containing core SNPs, this VCF file also contains SNPs present at sites in the genome that are not present in all samples (i.e. it contains SNPs that are not part of the core genome of all of the samples), as well as sites that are SNPs relative to the reference genome, but not within the samples themselves (e.g. the reference genome has a T, and all of the samples have a C; the site is a SNP relative to the reference, but the site is invariant when the samples are compared to each other). This file also contains SNPs that are present in regions of recombination.
 
-If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a core SNP was found.
+If the reference genome used contained multiple sequences, as is the case with a draft genome in the form of contigs or scaffolds, the sequences were concatenated in the order in which they appeared in the fasta file to form a closed pseudochromosome, and the "POS" column corresponds to the position in this pseudochromosome at which a SNP was found.
 
 This file can be used with vcftools/bcftools, or viewed in a text editor or Excel.
 
@@ -453,6 +453,20 @@ samtools view -h -o your_sample.sam your_sample_snpbac.bam
 ```
 
 In addition to a sorted bam, each sample will have an index file, *your_sample_snpbac.bam.bai*, which may be deleted if you're not planning on manipulating the bam files any further.
+
+***samtools_error_log.txt or freebayes_error_log.txt***
+
+*1 file*
+
+If something goes wrong during variant calling, it will be logged here. 
+
+***your_reference_genome_pseudochrom.fasta***
+
+*1 file*
+
+If the reference genome you supply to SNPBac contains more than one sequence (e.g. it was a draft genome made up of contigs or scaffolds), SNPBac concatenates the sequences into a pseudochromosome in the order of their appearance. This is the fasta file for the concatenated pseudochromosome. Any position coordinates given by vcf files or snp matrices output by SNPBac will refer to positions in this file.
+
+In addition to the actual fasta, several index files are output, depending on which pipeline you run.
 
 **gubbins**
 
