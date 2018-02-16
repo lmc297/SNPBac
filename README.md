@@ -572,7 +572,7 @@ phylogenetic analysis and post-analysis of large phylogenies.</a> *Bioinformatic
 ------------------------------------------------------------------------
 
 
-
+Disclaimer: SNPBac is...pretty neat! However, no tool is perfect, and SNPBac and its dependencies are not guaranteed to predict variants with perfect accuracy. As always, interpret your results with caution. We are not responsible for taxonomic misclassifications, misclassifications of an isolate's pathogenic or antimicrobial resistance potential, and/or misinterpretations (biological, statistical, or otherwise) of SNPBac results.
 
 
 
