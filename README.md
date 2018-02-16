@@ -42,7 +42,7 @@ Gerton Lunter, Gabor T. Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin,
 2011. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3137218/">The variant call format and VCFtools. </a>
 *Bioinformatics* 27(15): 2156–2158.
 
-Heng, Li, Bob Handsaker, Alec Wysoker, Tim Fennell, Jue Ruan, Nils Homer, Gabor Marth, Goncalo Abecasis, Richard Durbin,
+Li, Heng, Bob Handsaker, Alec Wysoker, Tim Fennell, Jue Ruan, Nils Homer, Gabor Marth, Goncalo Abecasis, Richard Durbin,
 and 1000 Genome Project Data Processing Subgroup. 2009. <a href="https://www.ncbi.nlm.nih.gov/pubmed/19505943">
 The Sequence Alignment/Map format and SAMtools.</a> *Bioinformatics* 25(16): 2078–2079.
 
