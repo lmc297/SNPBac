@@ -1,5 +1,6 @@
 # SNPBac
-## SNP and short indel calling pipeline for bacteria
+
+SNP and short indel calling pipeline for bacteria
 
 ## Overview
 
